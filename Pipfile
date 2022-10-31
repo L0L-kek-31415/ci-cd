@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
+psycopg2 = "*"
+python-dotenv = "*"
+pydantic = "*"
+flake8 = "*"
+mypy = "*"
+pytest = "*"
+requests = "*"
+
+[dev-packages]
+black = "*"
+
+[requires]
+python_version = "3.10"
