@@ -1,14 +1,11 @@
-pipline {
-    stages{
-        stage("linker and test") {
-            agent{
-                dockerfile true
-                }
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
             steps {
-                sh 'black .'
-                sh 'flake8 .'
-                sh 'pytest'
-                }
+                echo 'Hello World'
             }
         }
     }
+}
