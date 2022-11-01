@@ -1,11 +1,11 @@
 pipeline {
-    agent { dockerfile {
-        filename 'Dockerfile'
-        }
-    }
-
+    agent any
     stages {
         stage('linker and test') {
+            agent { dockerfile {
+                filename 'Dockerfile'
+                }
+            }
             steps {
                 echo 'Start'
                 sh 'flake8 .'
