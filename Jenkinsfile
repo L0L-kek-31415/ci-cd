@@ -1,10 +1,12 @@
 pipeline {
-    agent any
+    agent { dockerfile true }
 
     stages {
-        stage('Hello') {
+        stage('linker') {
             steps {
-                echo 'Hello World'
+                echo 'Start'
+                sh 'black .'
+                echo 'Finish'
             }
         }
     }
