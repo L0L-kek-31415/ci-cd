@@ -8,8 +8,8 @@ pipeline {
         stage('linker and test') {
             steps {
                 echo 'Start'
-                sh 'black .'
                 sh 'flake8 .'
+                sh 'black .'
                 echo 'tests'
                 sh 'python -m pytest'
                 echo 'Finish'
