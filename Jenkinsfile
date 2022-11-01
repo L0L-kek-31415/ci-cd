@@ -18,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                 app = docker.build 'Dockerfile'
+                 app = docker.build('Dockerfile')
                 }
             }
         }
