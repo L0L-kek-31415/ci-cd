@@ -11,7 +11,7 @@ pipeline {
                 sh 'black .'
                 sh 'flake8 .'
                 echo 'tests'
-                sh 'pytest'
+                sh 'python -m pytest'
                 echo 'Finish'
             }
         }
