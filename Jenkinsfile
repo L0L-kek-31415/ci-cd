@@ -15,5 +15,12 @@ pipeline {
                 echo 'Finish'
             }
         }
+        stage('Build') {
+            steps {
+                script{
+                 app = docker.build Dockerfile
+                }
+            }
+        }
     }
 }
