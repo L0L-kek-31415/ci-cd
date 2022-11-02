@@ -1,8 +1,7 @@
 pipeline {
     environment {
-        registryCredential = 'docker-hub'
+//         registryCredential = 'docker-hub'
         imageName = 'lolkek/fast-api'
-        DOCKERHUB_CREDENTIALS=credentials('docker-hub')
 
     }
     agent any
@@ -68,9 +67,12 @@ pipeline {
                 {
                     steps
                     {
-                        withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                        docker.withRegistry( '', '123')
                         {
-                            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                            withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                            {
+                                sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                            }
                         }
                     }
                 }
