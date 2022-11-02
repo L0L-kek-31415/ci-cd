@@ -1,4 +1,7 @@
 pipeline {
+    environment {
+    registryCredential = 'docker-hub'
+    }
     agent any
     stages {
         stage('linker and test') {
@@ -18,9 +21,21 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                 app = docker.build 'dockerfile'
+                 dockerImage = docker.build 'dockerfile'
                 }
             }
         }
+        stage('Deploy Image') {
+      steps{
+        script
+
+        {
+          docker.withRegistry( '', registryCredential )
+          {
+             dockerImage.push()
+             dockerImage.push('latest')
+          }
+        }
+      }
     }
 }
