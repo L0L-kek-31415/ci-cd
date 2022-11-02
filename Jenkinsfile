@@ -60,7 +60,7 @@ pipeline {
                 {
                     steps
                     {
-                        sh 'docker build -t {imageName}:latest .'
+                        dockerImage = docker.build imageName
                     }
                 }
 
