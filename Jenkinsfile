@@ -32,6 +32,7 @@ pipeline {
                 {
                         withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh """
+                            set +x
                             docker login -u ${USERNAME} --password-stdin ${PASSWORD}
                         """
                         dockerImage.push()
