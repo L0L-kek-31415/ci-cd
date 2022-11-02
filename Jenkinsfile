@@ -30,13 +30,12 @@ pipeline {
             steps{
                 script
                 {
-                     withCredentials([usernameColonPassword(credentialsId: '123', variable: 'USERPASS')]) {
+                        withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh """
-                            set +x
-                            docker login -u lolkek31415 -p ${USERPASS}
+                            docker login -u ${USERNAME} --password-stdin ${PASSWORD}
                         """
                         dockerImage.push()
-                     dockerImage.push('latest')
+                        dockerImage.push('latest')
                     }
 //                   docker.withRegistry( '', registryCredential)
 //                   {
