@@ -67,11 +67,14 @@ pipeline {
                 {
                     steps
                     {
-                        docker.withRegistry( '', '123')
+                        script
                         {
-                            withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                            docker.withRegistry( '', '123')
                             {
-                                sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                                withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                                {
+                                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                                }
                             }
                         }
                     }
