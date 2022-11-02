@@ -30,8 +30,11 @@ pipeline {
             steps{
                 script
                 {
-                    withCredentials([string(credentialsId: '123', variable: 'dockerpwd')]) {
-                        sh "docker login -u username -p ${dockerpwd}"
+                     withCredentials([usernameColonPassword(credentialsId: '123', variable: 'USERPASS')]) {
+                        sh """
+                            set +x
+                            docker login -u lolkek31415 -p ${USERPASS}
+                        """
                         dockerImage.push()
                      dockerImage.push('latest')
                     }
