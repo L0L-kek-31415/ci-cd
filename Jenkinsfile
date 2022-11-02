@@ -59,7 +59,7 @@ pipeline {
                 {
                     steps
                     {
-                        sh 'docker build -t {imageName} .'
+                        sh 'docker build -t $imageName .'
                     }
                 }
 
@@ -83,7 +83,7 @@ pipeline {
                 stage('Push') {
 
                     steps {
-                        sh 'docker push {imageName}:latest'
+                        sh 'docker push $imageName:latest'
                     }
                 }
             }
