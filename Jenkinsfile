@@ -1,7 +1,7 @@
 pipeline {
     environment {
 //         registryCredential = 'docker-hub'
-        imageName = 'lolkek/fast-api'
+        imageName = 'lolkek31415/fast-api'
 
     }
     agent any
