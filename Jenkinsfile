@@ -1,6 +1,7 @@
 pipeline {
     environment {
         registryCredential = 'docker-hub'
+        imageName = 'lolkek/fast-api'
     }
     agent any
     stages {
@@ -21,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                 dockerImage = docker.build 'dockerfile'
+                 dockerImage = docker.build imageName
                 }
             }
         }
@@ -30,7 +31,7 @@ pipeline {
         script
 
         {
-          docker.withRegistry( '', registryCredential )
+          docker.withRegistry( '', registryCredential)
           {
              dockerImage.push()
              dockerImage.push('latest')

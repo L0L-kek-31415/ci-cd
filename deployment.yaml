@@ -15,8 +15,7 @@ spec:
       spec:
         containers:
           - name: fast-api-app-container
-            image:
-            imagePullPolicy:
+            image: lolkek/fast-api
             ports:
               - containerPort: 5000
                 protocol: TCP
