@@ -40,6 +40,7 @@ pipeline {
 //                     }
                   docker.withRegistry( '', '123')
                   {
+                     docker.login('123')
                      dockerImage.push()
                      dockerImage.push('latest')
                   }
