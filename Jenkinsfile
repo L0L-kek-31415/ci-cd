@@ -1,11 +1,10 @@
 pipeline {
     environment {
-//         registryCredential = 'docker-hub'
         imageName = 'lolkek31415/fast-api'
-
     }
     agent any
-    stages {
+    stages
+    {
         stage('linker and test')
         {
             agent
@@ -17,81 +16,60 @@ pipeline {
                 }
                 steps
                 {
-                    echo 'Start'
                     sh 'flake8 .'
                     sh 'black .'
                     echo 'tests'
                     sh 'python -m pytest'
-                    echo 'Finish'
                 }
             }
-//             stage('Build')
-//             {
-//                 steps
-//                 {
-//                     script
-//                     {
-//                      dockerImage = docker.build imageName
-//                     }
-//                 }
-//             }
-//         stage('Deploy Image') {
-//             steps{
-//                 script
-//                 {
-//                         withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-//                         sh """
-//                             set +x
-//                             docker login -u ${USERNAME} --password-stdin ${PASSWORD}
-//                         """
-//                         dockerImage.push()
-//                         dockerImage.push('latest')
-//                     }
+        stage('Build_2')
+        {
+            steps
+            {
+                sh 'docker build -t $imageName .'
+            }
+        }
 
-
-//                   docker.withRegistry( '', '123')
-//                   {
-//                      dockerImage.push()
-//                      dockerImage.push('latest')
-//                   }
-
-                stage('Build_2')
+        stage('Login')
+        {
+            steps
+            {
+                script
                 {
-                    steps
+                    docker.withRegistry( '', '123')
                     {
-                        sh 'docker build -t $imageName .'
-                    }
-                }
-
-                stage('Login')
-                {
-                    steps
-                    {
-                        script
+                        withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
                         {
-                            docker.withRegistry( '', '123')
-                            {
-                                withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
-                                {
-                                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
-                                    sh 'docker tag $imageName $imageName'
-                                    sh 'docker push $imageName'
-
-                                }
-                            }
+                            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
+                            sh 'docker tag $imageName $imageName'
+                            sh 'docker push $imageName'
                         }
                     }
                 }
+            }
+        }
+        stage('Deploy to Kubernetes Cluster')
+        {
+            steps
+            {
+            ///CREATE AND APPLY THE PATCH. REMEMBER TO LOGIN ON THE CLUSTER. (-s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify)
+            sh  '''
 
-//                 stage('Push') {
-//
-//                     steps {
-//                     }
-//                 }
+            PATCH_TO_DEPLOY={\\"metadata\\":{\\"labels\\":{\\"version\\":\\"${env.BUILD_ID}\\"}},\\"spec\\":{\\"template\\":{\\"metadata\\":{\\"labels\\":{\\"version\\":\\"${env.BUILD_ID}\\"}},\\"spec\\":{\\"containers\\":[{\\"name\\":\\"$NAME_DEPLOY\\",\\"image\\":\\"my-image:${env.BUILD_ID}\\"}]}}}}
+
+            kubectl patch deployment $NAME_DEPLOY  -n $NAMESPACE -p $PATCH_TO_DEPLOY \
+            -s $CLUSTER_URL --token $TOKEN_CLUSTER --insecure-skip-tls-verify
+
+            '''
+
             }
-            post {
-                always {
-                    sh 'docker logout'
-                }
-            }
+        }
+    }
+    post
+    {
+        always
+        {
+            sh 'docker logout'
+        }
+    }
 }
