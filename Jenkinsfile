@@ -73,7 +73,7 @@ pipeline {
                             {
                                 withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
                                 {
-                                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
                                     sh 'docker push $imageName:latest'
 
                                 }
