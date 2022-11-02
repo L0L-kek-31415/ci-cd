@@ -7,27 +7,35 @@ pipeline {
     }
     agent any
     stages {
-        stage('linker and test') {
-            agent { dockerfile {
-                filename 'Dockerfile'
+        stage('linker and test')
+        {
+            agent
+            {
+                dockerfile
+                    {
+                    filename 'Dockerfile'
                     }
                 }
-            steps {
-                echo 'Start'
-                sh 'flake8 .'
-                sh 'black .'
-                echo 'tests'
-                sh 'python -m pytest'
-                echo 'Finish'
+                steps
+                {
+                    echo 'Start'
+                    sh 'flake8 .'
+                    sh 'black .'
+                    echo 'tests'
+                    sh 'python -m pytest'
+                    echo 'Finish'
                 }
             }
-        stage('Build') {
-            steps {
-                script{
-                 dockerImage = docker.build imageName
-                }
-            }
-            }
+//             stage('Build')
+//             {
+//                 steps
+//                 {
+//                     script
+//                     {
+//                      dockerImage = docker.build imageName
+//                     }
+//                 }
+//             }
 //         stage('Deploy Image') {
 //             steps{
 //                 script
@@ -48,16 +56,18 @@ pipeline {
 //                      dockerImage.push('latest')
 //                   }
 
-                stage('Build') {
-
-                    steps {
+                stage('Build_2')
+                {
+                    steps
+                    {
                         sh 'docker build -t {imageName}:latest .'
                     }
                 }
 
-                stage('Login') {
-
-                    steps {
+                stage('Login')
+                {
+                    steps
+                    {
                         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     }
                 }
@@ -68,12 +78,10 @@ pipeline {
                         sh 'docker push {imageName}:latest'
                     }
                 }
-
-
-    }
-    post {
-		always {
-			sh 'docker logout'
-		}
-	}
+            }
+            post {
+                always {
+                    sh 'docker logout'
+                }
+            }
 }
