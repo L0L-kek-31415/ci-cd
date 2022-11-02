@@ -60,7 +60,7 @@ pipeline {
                 {
                     steps
                     {
-                        dockerImage = docker.build imageName
+                        docker.build imageName
                     }
                 }
 
