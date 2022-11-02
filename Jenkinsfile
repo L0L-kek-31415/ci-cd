@@ -74,19 +74,20 @@ pipeline {
                                 withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
                                 {
                                     sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                                    sh 'docker push $imageName:latest'
+
                                 }
                             }
                         }
                     }
                 }
 
-                stage('Push') {
-
-                    steps {
-                        sh 'docker push $imageName:latest'
-                    }
-                }
-            }
+//                 stage('Push') {
+//
+//                     steps {
+//                     }
+//                 }
+//             }
             post {
                 always {
                     sh 'docker logout'
