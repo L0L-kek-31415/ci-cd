@@ -30,19 +30,19 @@ pipeline {
             steps{
                 script
                 {
-                        withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh """
-                            set +x
-                            docker login -u ${USERNAME} --password-stdin ${PASSWORD}
-                        """
-                        dockerImage.push()
-                        dockerImage.push('latest')
-                    }
-//                   docker.withRegistry( '', registryCredential)
-//                   {
-//                      dockerImage.push()
-//                      dockerImage.push('latest')
-//                   }
+//                         withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//                         sh """
+//                             set +x
+//                             docker login -u ${USERNAME} --password-stdin ${PASSWORD}
+//                         """
+//                         dockerImage.push()
+//                         dockerImage.push('latest')
+//                     }
+                  docker.withRegistry( '', '123')
+                  {
+                     dockerImage.push()
+                     dockerImage.push('latest')
+                  }
                 }
             }
         }
