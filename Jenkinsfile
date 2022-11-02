@@ -30,11 +30,16 @@ pipeline {
             steps{
                 script
                 {
-                  docker.withRegistry( '', registryCredential)
-                  {
-                     dockerImage.push()
+                    withCredentials([string(credentialsId: '123', variable: 'dockerpwd')]) {
+                        sh "docker login -u username -p ${dockerpwd}"
+                        dockerImage.push()
                      dockerImage.push('latest')
-                  }
+                    }
+//                   docker.withRegistry( '', registryCredential)
+//                   {
+//                      dockerImage.push()
+//                      dockerImage.push('latest')
+//                   }
                 }
             }
         }
