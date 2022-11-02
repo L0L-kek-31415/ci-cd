@@ -2,6 +2,8 @@ pipeline {
     environment {
         registryCredential = 'docker-hub'
         imageName = 'lolkek/fast-api'
+        DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+
     }
     agent any
     stages {
@@ -26,10 +28,10 @@ pipeline {
                 }
             }
             }
-        stage('Deploy Image') {
-            steps{
-                script
-                {
+//         stage('Deploy Image') {
+//             steps{
+//                 script
+//                 {
 //                         withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 //                         sh """
 //                             set +x
@@ -38,14 +40,40 @@ pipeline {
 //                         dockerImage.push()
 //                         dockerImage.push('latest')
 //                     }
-                  docker.withRegistry( '', '123')
-                  {
-                     docker.login
-                     dockerImage.push()
-                     dockerImage.push('latest')
-                  }
+
+
+//                   docker.withRegistry( '', '123')
+//                   {
+//                      dockerImage.push()
+//                      dockerImage.push('latest')
+//                   }
+
+                stage('Build') {
+
+                    steps {
+                        sh 'docker build -t {imageName}:latest .'
+                    }
                 }
-            }
-        }
+
+                stage('Login') {
+
+                    steps {
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    }
+                }
+
+                stage('Push') {
+
+                    steps {
+                        sh 'docker push {imageName}:latest'
+                    }
+                }
+
+
     }
+    post {
+		always {
+			sh 'docker logout'
+		}
+	}
 }
