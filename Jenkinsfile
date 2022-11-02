@@ -60,7 +60,7 @@ pipeline {
                 {
                     steps
                     {
-                        docker.build imageName
+                        sh 'docker build -t {imageName} .'
                     }
                 }
 
