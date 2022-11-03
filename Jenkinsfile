@@ -22,32 +22,34 @@ pipeline {
                     sh 'python -m pytest'
                 }
             }
-        stage('Build_2')
-        {
-            steps
-            {
-                sh 'docker build -t $imageName .'
-            }
-        }
 
-        stage('Login')
-        {
-            steps
-            {
-                script
+                stage('Build_2')
                 {
-                    docker.withRegistry( '', '123')
+                    steps
                     {
-                        withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                        sh 'docker build -t $imageName .'
+                    }
+                }
+
+                stage('Login')
+                {
+                    steps
+                    {
+                        script
                         {
-                            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
-                            sh 'docker tag $imageName $imageName'
-                            sh 'docker push $imageName'
+                            docker.withRegistry( '', '123')
+                            {
+                                withCredentials([usernamePassword(credentialsId: '123', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+                                {
+                                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin docker.io'
+                                    sh 'docker tag $imageName $imageName'
+                                    sh 'docker push $imageName'
+
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
 //         stage('Deploy to Kubernetes Cluster')
 //         {
 //             steps
