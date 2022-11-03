@@ -5,7 +5,7 @@ pipeline {
     agent any
     stages
     {
-        stage('linker and test')
+        stage('linter and test')
         {
             agent
             {
