@@ -5,7 +5,7 @@ pipeline {
     agent any
     stages
     {
-        stage('linker and test')
+        stage('linter and test')
         {
             agent
             {
@@ -16,8 +16,8 @@ pipeline {
                 }
                 steps
                 {
-//                     sh 'flake8 --statistics .'
-//                     sh 'black --check .'
+                    sh 'flake8 --statistics .'
+                    sh 'black --check .'
                     echo 'tests'
                     sh 'python -m pytest'
                 }
