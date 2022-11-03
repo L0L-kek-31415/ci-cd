@@ -4,7 +4,8 @@ metadata:
   name: fast-api-service
 spec:
   type: ClusterIP
-  ports:
-    - port: 5000
   selector:
     app: fast-api-app
+  ports:
+    - port: 80
+      targetPort: 5000
